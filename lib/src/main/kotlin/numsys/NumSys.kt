@@ -4,6 +4,7 @@ import numsys.model.NumberSystem
 import numsys.model.Radix
 import numsys.utils.COMMA
 import numsys.utils.NS_DELIMITER
+import java.math.RoundingMode
 import java.util.*
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -14,6 +15,7 @@ object NumSys {
     private var FRACTIONAL_LENGTH = 12
 
     fun convert(value: NumberSystem, toRadix: Radix): NumberSystem {
+        print("converter: $value")
 
         check(value.radix.value > 2 || value.radix.value < 36 || toRadix.value > 2 || value.radix.value < 36) {
             "Radix must be greater than 2 and smaller than 36"
@@ -23,10 +25,10 @@ object NumSys {
             return NumberSystem(value = value.value, radix = value.radix)
         }
 
-        return internalConvert(value, toRadix)
+        return execute(value, toRadix)
     }
 
-    private fun internalConvert(value: NumberSystem, toRadix: Radix): NumberSystem {
+    private fun execute(value: NumberSystem, toRadix: Radix): NumberSystem {
         Logger.getGlobal().log(Level.FINEST, "Converter::convert: from radix ${value.radix.value} to radix ${toRadix.value}")
 
         var minusBool = false
@@ -59,9 +61,9 @@ object NumSys {
         val integerPart = value.value.split("[,.]".toRegex())[0]
 
         val dec = valueWithoutComma.toCharArray().mapIndexed { index, char ->
-            char.toString().toInt(value.radix.value).toString(10).toBigDecimal() * value.radix.value.toDouble().pow(integerPart.toCharArray().size - (index + 1)).toBigDecimal()
+            (char.toString().toInt(value.radix.value).toString(10).toBigDecimal() * value.radix.value.toDouble().pow(integerPart.toCharArray().size - (index + 1)).toBigDecimal()).setScale(12, RoundingMode.HALF_UP)
         }
-        var result = dec.reduce { acc, decimal -> acc + decimal }.toString()    // Summing all chars
+        var result = dec.reduceRight { acc, decimal -> acc + decimal }.toString()    // Summing all chars
 
         // Pretty formatting
         while (result.length > 1 && result.contains("[,.]".toRegex()) && result.endsWith("0")) {

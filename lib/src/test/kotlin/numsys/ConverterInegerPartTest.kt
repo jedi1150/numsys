@@ -64,7 +64,7 @@ internal class ConverterInegerPartTest {
     fun hexToOctTest() = assertEquals(NumSys.convert(value = nsHex, toRadix = Radix.OCT), nsOct)
 
     @Test
-    fun hexTohexTest() = assertEquals(NumSys.convert(value = nsHex, toRadix = Radix.DEC), nsDec)
+    fun hexToDecTest() = assertEquals(NumSys.convert(value = nsHex, toRadix = Radix.DEC), nsDec)
 
     @Test
     fun hexToHexTest() = assertEquals(NumSys.convert(value = nsHex, toRadix = Radix.HEX), nsHex)
