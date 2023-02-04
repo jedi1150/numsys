@@ -5,7 +5,7 @@ import numsys.model.Radix
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class ConverterInegerPartTest {
+internal class ConverterIntegerPartTest {
     private val nsBin = NumberSystem("10000000", Radix.BIN)
     private val nsOct = NumberSystem("200", Radix.OCT)
     private val nsDec = NumberSystem("128", Radix.DEC)
