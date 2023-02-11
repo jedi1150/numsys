@@ -13,6 +13,15 @@ object NumSys {
     @JvmStatic
     private var FRACTIONAL_LENGTH = 12
 
+    /**
+     * Converts [NumberSystem] to another [NumberSystem].
+     *
+     * @param value Initial [NumberSystem].
+     * @param toRadix Required [Radix] for result.
+     * @return [NumberSystem]
+     * @see NumberSystem
+     * @see Radix
+     */
     fun convert(value: NumberSystem, toRadix: Radix): NumberSystem {
         Log.info("convert $value to $toRadix")
 
