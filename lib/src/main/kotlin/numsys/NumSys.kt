@@ -36,6 +36,16 @@ object NumSys {
         return execute(value, toRadix)
     }
 
+    /**
+     * Converts [NumberSystem] to another [NumberSystem].
+     *
+     * @param value Required [Radix] for result.
+     * @return [NumberSystem]
+     * @see NumberSystem
+     * @see Radix
+     */
+    fun NumberSystem.toRadix(value: Radix): NumberSystem = convert(this, value)
+
     private fun execute(value: NumberSystem, toRadix: Radix): NumberSystem {
         var minusBool = false
         if (value.value.contains("-")) {
