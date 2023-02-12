@@ -5,7 +5,6 @@ import numsys.model.Radix
 import numsys.utils.COMMA
 import numsys.utils.Log
 import numsys.utils.NS_DELIMITER
-import java.math.RoundingMode
 import java.util.*
 import kotlin.math.pow
 
@@ -75,7 +74,7 @@ object NumSys {
         val integerPart = value.value.split("[,.]".toRegex())[0]
 
         val dec = valueWithoutComma.toCharArray().mapIndexed { index, char ->
-            (char.toString().toInt(value.radix.value).toString(10).toBigDecimal() * value.radix.value.toDouble().pow(integerPart.toCharArray().size - (index + 1)).toBigDecimal()).setScale(12, RoundingMode.HALF_UP)
+            (char.toString().toInt(value.radix.value).toString(10).toBigDecimal() * value.radix.value.toDouble().pow(integerPart.toCharArray().size - (index + 1)).toBigDecimal())
         }
         var result = dec.reduceRight { acc, decimal -> acc + decimal }.toString()    // Summing all chars
 
