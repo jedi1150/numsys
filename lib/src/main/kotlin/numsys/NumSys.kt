@@ -5,7 +5,7 @@ import numsys.model.Radix
 import numsys.utils.COMMA
 import numsys.utils.Log
 import numsys.utils.NS_DELIMITER
-import java.util.*
+import java.util.Locale
 import kotlin.math.pow
 
 object NumSys {
@@ -24,13 +24,8 @@ object NumSys {
     fun convert(value: NumberSystem, toRadix: Radix): NumberSystem {
         Log.info("convert $value to $toRadix")
 
-        check(value.radix.value > 2 || value.radix.value < 36 || toRadix.value > 2 || value.radix.value < 36) {
-            "Radix must be greater than 2 and smaller than 36"
-        }
-
-        if (value.radix == toRadix) {
-            return NumberSystem(value = value.value, radix = value.radix)
-        }
+        if (value.value.none { it.isLetterOrDigit() }) throw IllegalArgumentException("Noting to convert")
+        if (value.radix == toRadix) return value
 
         return execute(value, toRadix)
     }

@@ -2,6 +2,13 @@ package numsys.model
 
 @JvmInline
 value class Radix(val value: Int) {
+
+    init {
+        check(value > 2 || value < 36) {
+            "Radix must be greater than 2 and smaller than 36"
+        }
+    }
+
     companion object {
         val BIN = Radix(2)
         val OCT = Radix(8)
