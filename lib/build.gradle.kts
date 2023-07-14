@@ -23,7 +23,7 @@ publishing {
         register<MavenPublication>("mavenJava") {
             groupId = "com.github.jedi1150"
             artifactId = "numsys"
-            version = "0.0.2"
+            version = "0.0.3"
 
             afterEvaluate {
                 from(components["java"])
