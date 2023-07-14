@@ -5,6 +5,8 @@ import numsys.model.Radix
 import numsys.utils.COMMA
 import numsys.utils.Log
 import numsys.utils.NS_DELIMITER
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.Locale
 import kotlin.math.pow
 
@@ -68,8 +70,12 @@ object NumSys {
         val valueWithoutComma = value.value.replace("[,.]".toRegex(), "")
         val integerPart = value.value.split("[,.]".toRegex())[0]
 
+        if (valueWithoutComma == BigDecimal.ZERO.toString()) {
+            return NumberSystem(value = value.value, radix = Radix.DEC)
+        }
+
         val dec = valueWithoutComma.toCharArray().mapIndexed { index, char ->
-            (char.toString().toInt(value.radix.value).toString(10).toBigDecimal() * value.radix.value.toDouble().pow(integerPart.toCharArray().size - (index + 1)).toBigDecimal())
+            (char.toString().toInt(value.radix.value).toString(10).toBigDecimal() * value.radix.value.toDouble().pow(integerPart.toCharArray().size - (index + 1)).toBigDecimal()).setScale(12, RoundingMode.HALF_UP)
         }
         var result = dec.reduceRight { acc, decimal -> acc + decimal }.toString()    // Summing all chars
 
