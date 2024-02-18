@@ -58,10 +58,7 @@ publishing {
         maven {
             name = "githubPackages"
             url = uri("https://maven.pkg.github.com/jedi1150/numsys")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
+            credentials(PasswordCredentials::class)
         }
     }
 }
