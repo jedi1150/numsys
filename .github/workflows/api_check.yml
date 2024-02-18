@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  lint:
+  api-check:
     runs-on: ubuntu-latest
 
     steps:

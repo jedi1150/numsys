@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy_internal:
+  deploy_github_package:
     runs-on: ubuntu-latest
 
     steps:
