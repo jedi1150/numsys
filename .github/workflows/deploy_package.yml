@@ -25,6 +25,6 @@ jobs:
 
       - name: Publish to GitHub Packages
         run: ./gradlew publishMavenPublicationToGithubPackagesRepository
-        with:
+        env:
           ORG_GRADLE_PROJECT_githubPackagesUsername: ${{ secrets.GITHUB_ACTOR }}
           ORG_GRADLE_PROJECT_githubPackagesPassword: ${{ secrets.GITHUB_TOKEN }}
