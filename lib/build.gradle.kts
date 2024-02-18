@@ -17,7 +17,7 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("io.github.jedi1150", "numsys", "0.0.4-rc")
+    coordinates("com.jedi1150", "numsys", "0.0.4-rc")
 
     configure(
         KotlinJvm(
@@ -42,7 +42,7 @@ mavenPublishing {
             developer {
                 id.set("jedi1150")
                 name.set("Oleg Yakovlev")
-                url.set("https://github.com/jedi1150/")
+                url.set("https://jedi1150.com/")
             }
         }
         scm {
