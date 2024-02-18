@@ -21,9 +21,9 @@ public object NumSys {
      */
     @JvmStatic
     public fun convert(value: String, sourceRadix: Int, targetRadix: Int): String {
-        check(value.isNotBlank()) { "Source value must not be empty" }
-        check(value.replace(".", "").all { char -> char.isLetterOrDigit() }) { "Incorrect source value" }
-        check(sourceRadix in 2..62 && targetRadix in 2..62) { "Source and target radixes must be in the range from 2 to 62" }
+        require(value.isNotBlank()) { "Source value must not be empty" }
+        require(value.replace(".", "").all { char -> char.isLetterOrDigit() }) { "Incorrect source value" }
+        require(sourceRadix in 2..62 && targetRadix in 2..62) { "Source and target radixes must be in the range from 2 to 62" }
 
         val parts = value.split(".")
         val integerPart = parts[0]

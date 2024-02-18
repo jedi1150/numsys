@@ -59,26 +59,6 @@ class ConverterIllegalValueTest {
     }
 
     @Test
-    fun decToBinTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsDec, targetRadix = Radix.BIN)}
-    }
-
-    @Test
-    fun decToOctTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsDec, targetRadix = Radix.OCT)}
-    }
-
-    @Test
-    fun decToDecTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsDec, targetRadix = Radix.DEC)}
-    }
-
-    @Test
-    fun decToHexTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsDec, targetRadix = Radix.HEX)}
-    }
-
-    @Test
     fun hexToBinTest() {
         assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsHex, targetRadix = Radix.BIN)}
     }

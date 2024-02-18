@@ -3,7 +3,7 @@ package numsys.model
 public class Radix(public val value: Int) {
 
     init {
-        check(value > 2 || value < 36) {
+        require(value > 2 || value < 36) {
             "Radix must be greater than 2 and smaller than 36"
         }
     }
