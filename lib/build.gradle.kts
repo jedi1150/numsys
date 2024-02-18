@@ -17,7 +17,7 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("io.github.jedi1150", "numsys", "0.0.4-SNAPSHOT")
+    coordinates("io.github.jedi1150", "numsys", "0.0.4-rc")
 
     configure(
         KotlinJvm(
