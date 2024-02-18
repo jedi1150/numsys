@@ -2,116 +2,153 @@ package numsys
 
 import numsys.model.NumberSystem
 import numsys.model.Radix
-import numsys.utils.COMMA
-import numsys.utils.Log
-import numsys.utils.NS_DELIMITER
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.util.Locale
 import kotlin.math.pow
 
-object NumSys {
+public object NumSys {
+    /**
+     * The length of the fraction part.
+     */
     @JvmStatic
-    private var FRACTIONAL_LENGTH = 12
+    public var fractionalLength: Int = 12
+
+    /**
+     * Converts the value of the source number system to the target number system.
+     *
+     * @param value source value.
+     * @param sourceRadix source radix.
+     * @param targetRadix required radix.
+     * @return value of target radix.
+     */
+    @JvmStatic
+    public fun convert(value: String, sourceRadix: Int, targetRadix: Int): String {
+        check(value.isNotBlank()) { "Source value must not be empty" }
+        check(value.replace(".", "").all { char -> char.isLetterOrDigit() }) { "Incorrect source value" }
+        check(sourceRadix in 2..62 && targetRadix in 2..62) { "Source and target radixes must be in the range from 2 to 62" }
+
+        val parts = value.split(".")
+        val integerPart = parts[0]
+        val fractionalPart = if (parts.size > 1) parts[1] else ""
+
+        val integerResult = convertIntegerPart(integerPart, sourceRadix, targetRadix)
+        val fractionalResult = convertFractionalPart(fractionalPart, sourceRadix, targetRadix)
+
+        var result = if (fractionalResult.isEmpty()) integerResult else "$integerResult.$fractionalResult"
+
+        while (result.length > 1 && result.contains("[,.]".toRegex()) && result.endsWith("0")) {
+            result = result.substringBeforeLast("0")
+        }
+
+        while (result.length > 1 && result.contains("[,.]".toRegex()) && result.endsWith(".")) {
+            result = result.substringBeforeLast(".")
+        }
+
+        return result
+    }
 
     /**
      * Converts [NumberSystem] to another [NumberSystem].
      *
-     * @param value Initial [NumberSystem].
-     * @param toRadix Required [Radix] for result.
-     * @return [NumberSystem]
+     * @param numberSystem Source [NumberSystem].
+     * @param targetRadix Required [Radix] for result.
+     * @return [NumberSystem] of target radix.
      * @see NumberSystem
      * @see Radix
      */
-    fun convert(value: NumberSystem, toRadix: Radix): NumberSystem {
-        Log.info("convert $value to $toRadix")
-
-        if (value.value.none { it.isLetterOrDigit() }) throw IllegalArgumentException("Noting to convert")
-        if (value.radix == toRadix) return value
-
-        return execute(value, toRadix)
+    @JvmStatic
+    public fun convert(numberSystem: NumberSystem, targetRadix: Radix): NumberSystem {
+        return NumberSystem(
+            value = convert(
+                value = numberSystem.value,
+                sourceRadix = numberSystem.radix.value,
+                targetRadix = targetRadix.value,
+            ),
+            radix = targetRadix,
+        )
     }
 
     /**
      * Converts [NumberSystem] to another [NumberSystem].
      *
      * @param value Required [Radix] for result.
-     * @return [NumberSystem]
+     * @return [NumberSystem] of target radix.
      * @see NumberSystem
      * @see Radix
      */
-    fun NumberSystem.toRadix(value: Radix): NumberSystem = convert(this, value)
+    @JvmStatic
+    public fun NumberSystem.toRadix(value: Radix): NumberSystem = convert(this, value)
 
-    private fun execute(value: NumberSystem, toRadix: Radix): NumberSystem {
-        var minusBool = false
-        if (value.value.contains("-")) {
-            value.value = value.value.replace("-", "")
-            minusBool = true
-        }
+    @JvmStatic
+    private fun convertIntegerPart(value: String, sourceRadix: Int, targetRadix: Int): String {
+        val decimalValue = convertToDecimal(value, sourceRadix)
+        return convertFromDecimal(decimalValue, targetRadix)
+    }
 
-        var result: NumberSystem
+    @JvmStatic
+    private fun convertFractionalPart(value: String, sourceRadix: Int, targetRadix: Int): String {
+        val decimalValue = convertFractionalToDecimal(value, sourceRadix)
+        return convertFractionalFromDecimal(decimalValue, targetRadix)
+    }
 
-        if (value.radix != Radix.DEC) {
-            result = toDec(value)
-            if (toRadix != Radix.DEC) {
-                result = fromDec(result, toRadix)
+    @JvmStatic
+    private fun convertToDecimal(value: String, radix: Int): Double {
+        var result = 0.0
+        for ((power, i) in (value.length - 1 downTo 0).withIndex()) {
+            val digitValue = when {
+                value[i].isDigit() -> value[i] - '0'
+                value[i] in 'a'..'z' -> value[i] - 'a' + 10
+                value[i] in 'A'..'Z' -> value[i] - 'A' + 36
+                else -> throw IllegalArgumentException("Incorrect symbol")
             }
-        } else {
-            result = fromDec(value, toRadix)
-        }
-
-        if (minusBool) {
-            result.value = result.value.replaceRange(0, 0, "-")
+            result += digitValue * radix.toDouble().pow(power.toDouble())
         }
         return result
     }
 
-    private fun toDec(value: NumberSystem): NumberSystem {
-        val valueWithoutComma = value.value.replace("[,.]".toRegex(), "")
-        val integerPart = value.value.split("[,.]".toRegex())[0]
-
-        if (valueWithoutComma == BigDecimal.ZERO.toString()) {
-            return NumberSystem(value = value.value, radix = Radix.DEC)
+    @JvmStatic
+    private fun convertFractionalToDecimal(value: String, radix: Int): Double {
+        var result = 0.0
+        for (i in value.indices) {
+            val digitValue = when {
+                value[i].isDigit() -> value[i] - '0'
+                value[i] in 'a'..'z' -> value[i] - 'a' + 10
+                value[i] in 'A'..'Z' -> value[i] - 'A' + 36
+                else -> throw IllegalArgumentException("Incorrect symbol")
+            }
+            result += digitValue / radix.toDouble().pow((i + 1).toDouble())
         }
-
-        val dec = valueWithoutComma.toCharArray().mapIndexed { index, char ->
-            (char.toString().toInt(value.radix.value).toString(10).toBigDecimal() * value.radix.value.toDouble().pow(integerPart.toCharArray().size - (index + 1)).toBigDecimal()).setScale(12, RoundingMode.HALF_UP)
-        }
-        var result = dec.reduceRight { acc, decimal -> acc + decimal }.toString()    // Summing all chars
-
-        // Pretty formatting
-        while (result.length > 1 && result.contains("[,.]".toRegex()) && result.endsWith("0")) {
-            result = result.substringBeforeLast("0")
-        }
-
-        while (result.length > 1 && result.contains("[,.]".toRegex()) && (result.endsWith(COMMA) || result.endsWith(NS_DELIMITER))) {
-            result = result.split("[,.]".toRegex())[0]
-        }
-
-        return NumberSystem(value = result, radix = Radix.DEC)
+        return result
     }
 
-    private fun fromDec(value: NumberSystem, toRadix: Radix): NumberSystem {
-        var result: String = value.value.split("[,.]".toRegex())[0].toBigInteger(10).toString(toRadix.value).uppercase(Locale.getDefault())
-        if ((value.value.contains(COMMA) || value.value.contains(NS_DELIMITER)) && value.value.split("[,.]".toRegex())[1].isNotEmpty()) {
-            var fractionalPart = value.value
-            var i = 0
-            var convertedFraction = ""
-            while (i < FRACTIONAL_LENGTH) {
-                if (fractionalPart.split("[,.]".toRegex())[1].toBigDecimal() == "0".toBigDecimal()) break
-                fractionalPart = (".${fractionalPart.split("[,.]".toRegex())[1]}".toBigDecimal() * toRadix.value.toBigDecimal()).toString()
-                i++
-                convertedFraction += fractionalPart.split("[,.]".toRegex())[0].toBigInteger(10).toString(toRadix.value).uppercase(Locale.getDefault())
-            }
-            result += ".$convertedFraction"
+    @JvmStatic
+    private fun convertFromDecimal(value: Double, radix: Int): String {
+        var decimalValue = value.toLong()
+        val result = StringBuilder()
+        while (decimalValue > 0) {
+            val remainder = (decimalValue % radix).toInt()
+            val remainderChar = if (remainder < 10) (remainder + '0'.code).toChar() else if (remainder < 36) (remainder - 10 + 'a'.code).toChar() else (remainder - 36 + 'A'.code).toChar()
+            result.insert(0, remainderChar)
+            decimalValue /= radix
         }
+        return if (result.isEmpty()) "0" else result.toString()
+    }
 
-        // Pretty formatting
-        while (result.length > 1 && result.contains("[,.]".toRegex()) && result.endsWith("0")) {
-            result = result.substringBeforeLast("0")
+    @JvmStatic
+    private fun convertFractionalFromDecimal(value: Double, radix: Int): String {
+        val result = StringBuilder()
+        var remainingValue = value
+        repeat(5) {
+            remainingValue *= radix
+            val integerPart = remainingValue.toInt()
+            result.append(if (integerPart < 10) (integerPart + '0'.code).toChar() else if (integerPart < 36) (integerPart - 10 + 'a'.code).toChar() else (integerPart - 36 + 'A'.code).toChar())
+            remainingValue -= integerPart
         }
+        return result.toString()
+    }
 
-        return NumberSystem(value = result, radix = toRadix)
+    public object Constants {
+        public const val Comma: Char = ','
+        public const val Delimiter: Char = '.'
+        public const val GroupSeparator: Char = ' '
     }
 
 }

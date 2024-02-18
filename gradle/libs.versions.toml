@@ -1,0 +1,13 @@
+[versions]
+binaryCompatibilityValidator = "0.14.0"
+dokka = "1.9.10"
+kotlin = "1.9.22"
+vanniktechPublish = "0.27.0"
+
+[libraries]
+
+[plugins]
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "binaryCompatibilityValidator" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktechPublish" }

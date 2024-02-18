@@ -20,82 +20,82 @@ class ConverterIllegalValueTest {
 
     @Test
     fun binToBinTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsBin, toRadix = Radix.BIN) }
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsBin, targetRadix = Radix.BIN) }
     }
 
     @Test
     fun binToOctTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsBin, toRadix = Radix.OCT)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsBin, targetRadix = Radix.OCT)}
     }
 
     @Test
     fun binToDecTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsBin, toRadix = Radix.DEC)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsBin, targetRadix = Radix.DEC)}
     }
 
     @Test
     fun binToHexTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsBin, toRadix = Radix.HEX)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsBin, targetRadix = Radix.HEX)}
     }
 
     @Test
     fun octToBinTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsOct, toRadix = Radix.BIN)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsOct, targetRadix = Radix.BIN)}
     }
 
     @Test
     fun octToOctTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsOct, toRadix = Radix.OCT)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsOct, targetRadix = Radix.OCT)}
     }
 
     @Test
     fun octToDecTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsOct, toRadix = Radix.DEC)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsOct, targetRadix = Radix.DEC)}
     }
 
     @Test
     fun octToHexTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsOct, toRadix = Radix.HEX)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsOct, targetRadix = Radix.HEX)}
     }
 
     @Test
     fun decToBinTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsDec, toRadix = Radix.BIN)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsDec, targetRadix = Radix.BIN)}
     }
 
     @Test
     fun decToOctTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsDec, toRadix = Radix.OCT)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsDec, targetRadix = Radix.OCT)}
     }
 
     @Test
     fun decToDecTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsDec, toRadix = Radix.DEC)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsDec, targetRadix = Radix.DEC)}
     }
 
     @Test
     fun decToHexTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsDec, toRadix = Radix.HEX)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsDec, targetRadix = Radix.HEX)}
     }
 
     @Test
     fun hexToBinTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsHex, toRadix = Radix.BIN)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsHex, targetRadix = Radix.BIN)}
     }
 
     @Test
     fun hexToOctTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsHex, toRadix = Radix.OCT)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsHex, targetRadix = Radix.OCT)}
     }
 
     @Test
     fun hexToDecTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsHex, toRadix = Radix.DEC)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsHex, targetRadix = Radix.DEC)}
     }
 
     @Test
     fun hexToHexTest() {
-        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(value = nsHex, toRadix = Radix.HEX)}
+        assertFailsWith(IllegalArgumentException::class) { NumSys.convert(numberSystem = nsHex, targetRadix = Radix.HEX)}
     }
 
 }

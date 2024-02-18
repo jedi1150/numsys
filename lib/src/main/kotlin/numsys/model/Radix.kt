@@ -1,7 +1,6 @@
 package numsys.model
 
-@JvmInline
-value class Radix(val value: Int) {
+public class Radix(public val value: Int) {
 
     init {
         check(value > 2 || value < 36) {
@@ -9,11 +8,18 @@ value class Radix(val value: Int) {
         }
     }
 
-    companion object {
-        val BIN = Radix(2)
-        val OCT = Radix(8)
-        val DEC = Radix(10)
-        val HEX = Radix(16)
+    public companion object {
+        @JvmField
+        public val BIN: Radix = Radix(2)
+
+        @JvmField
+        public val OCT: Radix = Radix(8)
+
+        @JvmField
+        public val DEC: Radix = Radix(10)
+
+        @JvmField
+        public val HEX: Radix = Radix(16)
     }
 }
 
@@ -21,10 +27,10 @@ private val radixes: List<Radix> = Array(36) { radix -> Radix(radix + 1) }.filte
 private val groupByThreeNumbers: List<Radix> = radixes.filter { listOf(Radix(3), Radix(7), Radix.OCT, Radix(9), Radix.DEC, Radix(11), Radix(12), Radix(13), Radix(14), Radix(15)).contains(it) }
 private val groupByFourNumbers: List<Radix> = radixes.filter { !listOf(Radix(3), Radix(7), Radix.OCT, Radix(9), Radix.DEC, Radix(11), Radix(12), Radix(13), Radix(14), Radix(15)).contains(it) }
 
-fun Radix.groupLength(): Int = when (this) {
+public fun Radix.groupLength(): Int = when (this) {
     in groupByThreeNumbers -> 3
     in groupByFourNumbers -> 4
     else -> 3
 }
 
-fun NumberSystem.groupLength(): Int = this.radix.groupLength()
+public fun NumberSystem.groupLength(): Int = radix.groupLength()
