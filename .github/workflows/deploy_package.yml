@@ -1,0 +1,30 @@
+name: Deploy GitHub Package
+
+on:
+  # Triggers the workflow on push of version tag
+  push:
+    tags: [ 'v*' ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy_github_package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - uses: gradle/wrapper-validation-action@v2
+
+      - uses: gradle/gradle-build-action@v3
+
+      - name: Publish to GitHub Packages
+        run: ./gradlew publishMavenPublicationToGithubPackagesRepository
+        with:
+          ORG_GRADLE_PROJECT_githubPackagesUsername: ${{ secrets.GITHUB_ACTOR }}
+          ORG_GRADLE_PROJECT_githubPackagesPassword: ${{ secrets.GITHUB_TOKEN }}

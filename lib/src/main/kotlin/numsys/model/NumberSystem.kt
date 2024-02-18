@@ -1,12 +1,9 @@
 package numsys.model
 
-import numsys.utils.NS_DELIMITER
-import numsys.utils.NS_GROUP_SEPARATOR
+import numsys.NumSys
 
-data class NumberSystem(var value: String, var radix: Radix)
+public class NumberSystem(public val value: String, public val radix: Radix)
 
-fun NumberSystem.pretty(): String {
-    return this.value.split(NS_DELIMITER).joinToString(separator = NS_DELIMITER.toString()) { part ->
-        part.reversed().chunked(this.groupLength()).joinToString(NS_GROUP_SEPARATOR.toString()).reversed()
-    }
+public fun NumberSystem.pretty(): String = value.split(NumSys.Constants.Delimiter).joinToString(separator = NumSys.Constants.Delimiter.toString()) { part ->
+    part.reversed().chunked(groupLength()).joinToString(NumSys.Constants.GroupSeparator.toString()).reversed()
 }
